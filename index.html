@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FixMyCampus | AI-Powered Campus Issue Reporting & Resolution</title>
+  <meta name="description" content="FixMyCampus helps students report campus problems and helps administrators prioritize and resolve critical campus issues with AI intelligence.">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232563eb'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
+</head>
+<body>
+
+  <!-- Top Global Header -->
+  <header class="site-header">
+    <div class="brand-logo" onclick="AppRouter.navigate('landing')">
+      <div class="logo-badge">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+          <path d="M2 17l10 5 10-5"></path>
+          <path d="M2 12l10 5 10-5"></path>
+        </svg>
+      </div>
+      <div class="logo-text">FixMy<span>Campus</span></div>
+    </div>
+
+    <!-- Navigation Links -->
+    <nav class="nav-links" id="main-nav-links">
+      <a class="nav-link active" onclick="AppRouter.navigate('landing')">Home</a>
+      <a class="nav-link" onclick="AppRouter.navigate('student-dashboard')">Student Portal</a>
+      <a class="nav-link" onclick="AppRouter.navigate('report-issue')">Report Issue</a>
+      <a class="nav-link" onclick="AppRouter.navigate('my-reports')">My Reports</a>
+      <a class="nav-link" onclick="AppRouter.navigate('admin-dashboard')">Admin Center</a>
+      <a class="nav-link" onclick="AppRouter.navigate('analytics')">Analytics</a>
+    </nav>
+
+    <!-- Header Actions & Role Switcher -->
+    <div class="header-actions">
+      <!-- Role Switcher -->
+      <div class="role-switch-container" title="Switch User Role">
+        <button class="role-btn active" id="btn-role-student" onclick="AppRouter.setRole('student')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          Student
+        </button>
+        <button class="role-btn admin-mode" id="btn-role-admin" onclick="AppRouter.setRole('admin')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+          Admin
+        </button>
+      </div>
+
+      <!-- Quick Action Button -->
+      <button class="btn btn-primary btn-sm" onclick="AppRouter.navigate('report-issue')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        New Report
+      </button>
+
+      <!-- Profile Avatar -->
+      <div class="avatar" id="header-avatar" title="Logged in as Aarav Sharma">AS</div>
+    </div>
+  </header>
+
+  <!-- Main View Router Container -->
+  <main id="app-view-container">
+
+    <!-- ====================================================================
+         1. LANDING PAGE VIEW
+         ==================================================================== -->
+    <section id="view-landing" class="app-view landing-view">
+      <!-- Hero Section -->
+      <div class="hero-section">
+        <div class="hero-pill">
+          <span>⚡ AI-Powered Campus Infrastructure Care</span>
+        </div>
+        <h1 class="hero-title">
+          Make Your Campus Better, <br>
+          <span class="gradient-text">One Report at a Time.</span>
+        </h1>
+        <p class="hero-subtitle">
+          FixMyCampus helps students report campus problems and empowers campus administrators to prioritize, route, and resolve the issues that matter most using intelligent triage.
+        </p>
+        <div class="hero-cta-group">
+          <button class="btn btn-primary btn-lg" onclick="AppRouter.navigate('report-issue')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+            Report an Issue
+          </button>
+          <button class="btn btn-secondary btn-lg" onclick="AppRouter.navigate('student-dashboard')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            View Dashboard
+          </button>
+        </div>
+
+        <!-- Hero Dashboard Interactive Preview -->
+        <div class="hero-preview-container">
+          <div class="hero-preview-inner">
+            <div class="preview-top-bar">
+              <div class="browser-dots">
+                <div class="browser-dot dot-red"></div>
+                <div class="browser-dot dot-yellow"></div>
+                <div class="browser-dot dot-green"></div>
+              </div>
+              <div class="badge badge-ai">
+                <span class="badge-dot" style="background:#8b5cf6;"></span>
+                Live Campus Intelligence Stream
+              </div>
+            </div>
+
+            <!-- Preview Metric Grid -->
+            <div class="preview-stats-grid">
+              <div class="preview-stat-card">
+                <div class="label">Total Issues</div>
+                <div class="val" id="landing-stat-total">127</div>
+                <div class="stat-trend positive">↑ Active tracking</div>
+              </div>
+              <div class="preview-stat-card" style="border-left: 3px solid var(--critical-red);">
+                <div class="label" style="color:var(--critical-red);">Critical Issues</div>
+                <div class="val" style="color:var(--critical-red);" id="landing-stat-critical">18</div>
+                <div class="stat-trend warning">⚡ Immediate focus</div>
+              </div>
+              <div class="preview-stat-card">
+                <div class="label">Resolved Issues</div>
+                <div class="val" style="color:var(--low-green);" id="landing-stat-resolved">84</div>
+                <div class="stat-trend positive">✓ 94% satisfaction</div>
+              </div>
+              <div class="preview-stat-card">
+                <div class="label">Avg Resolution Time</div>
+                <div class="val" style="color:var(--brand-primary);">2.4 Days</div>
+                <div class="stat-trend positive">⚡ 3x faster turnaround</div>
+              </div>
+            </div>
+
+            <!-- Preview Recent Live Feed -->
+            <div class="table-card" style="box-shadow:none; border: 1px solid #f1f5f9;">
+              <div class="custom-table-wrap">
+                <table class="custom-table">
+                  <thead>
+                    <tr>
+                      <th>Complaint</th>
+                      <th>Location</th>
+                      <th>Category</th>
+                      <th>AI Priority</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="landing-preview-tbody">
+                    <!-- Dynamic sample rows inserted by JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- How FixMyCampus Works Section -->
+      <div class="section-wrapper">
+        <div class="section-header">
+          <h2>How FixMyCampus Works</h2>
+          <p>A streamlined, 3-step workflow connecting student complaints to rapid facility resolution.</p>
+        </div>
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-badge">1</div>
+            <h3>1. Report</h3>
+            <p>Students submit a campus problem with a concise description, category, specific room/floor location, and optional photo upload.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-badge" style="background: linear-gradient(135deg, #7c3aed, #4f46e5);">2</div>
+            <h3>2. Prioritize</h3>
+            <p>The AI engine instantly assesses linguistic hazard markers, assigns a 0–100 urgency score, and flags duplicates across campus.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-badge" style="background: linear-gradient(135deg, #059669, #10b981);">3</div>
+            <h3>3. Resolve</h3>
+            <p>Administrators auto-assign tasks to maintenance, IT, or plumbing teams and track progress until complete resolution.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Why FixMyCampus Cards -->
+      <div class="section-wrapper">
+        <div class="section-header">
+          <h2>Why FixMyCampus?</h2>
+          <p>Engineered for high-density universities, colleges, and educational institutions.</p>
+        </div>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon-box">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            </div>
+            <h4>Faster Issue Resolution</h4>
+            <p>Eliminate manual paper logs and slow email threads with direct automated routing to field staff.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon-box" style="background:#f5f3ff; color:#7c3aed;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+            </div>
+            <h4>AI-Powered Prioritization</h4>
+            <p>Critical electrical sparks and safety hazards jump directly to the top of the admin queue in seconds.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon-box" style="background:#fff7ed; color:#ea580c;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            </div>
+            <h4>Duplicate Issue Detection</h4>
+            <p>Prevents redundant reports when multiple students notice the same lab Wi-Fi or classroom AC down.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon-box" style="background:#ecfdf5; color:#059669;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            </div>
+            <h4>Transparent Tracking</h4>
+            <p>Students monitor real-time 5-stage timelines from report submission to technician sign-off.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon-box" style="background:#f0f9ff; color:#0284c7;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+            </div>
+            <h4>Data-Driven Management</h4>
+            <p>Identify recurring infrastructure bottlenecks and allocate campus maintenance budgets efficiently.</p>
+          </div>
+        </div>
+
+        <!-- Final CTA Banner -->
+        <div class="cta-banner">
+          <h2>See something broken? Report it.</h2>
+          <p>Join thousands of students and faculty members keeping our campus clean, safe, and fully functional.</p>
+          <button class="btn btn-primary btn-lg" onclick="AppRouter.navigate('report-issue')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Submit a Campus Report
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         2. STUDENT DASHBOARD VIEW (With Sidebar Layout)
+         ==================================================================== -->
+    <section id="view-student-dashboard" class="app-view app-layout" style="display:none;">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div>
+          <div class="sidebar-label">Student Menu</div>
+          <ul class="sidebar-menu">
+            <li class="sidebar-item active" onclick="AppRouter.navigate('student-dashboard')">
+              <div class="sidebar-item-content">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                Dashboard
+              </div>
+            </li>
+            <li class="sidebar-item" onclick="AppRouter.navigate('report-issue')">
+              <div class="sidebar-item-content">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                Report Issue
+              </div>
+              <span class="badge badge-ai" style="font-size:0.65rem; padding:2px 6px;">AI</span>
+            </li>
+            <li class="sidebar-item" onclick="AppRouter.navigate('my-reports')">
+              <div class="sidebar-item-content">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                My Reports
+              </div>
+              <span class="sidebar-count" id="sidebar-my-count">7</span>
+            </li>
+            <li class="sidebar-item" onclick="AppRouter.navigate('admin-dashboard')">
+              <div class="sidebar-item-content">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                Campus Feed
+              </div>
+            </li>
+            <li class="sidebar-item" onclick="AppRouter.showToast('Notifications are up to date.', 'info')">
+              <div class="sidebar-item-content">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                Notifications
+              </div>
+              <span class="badge badge-critical" style="padding:1px 6px; font-size:0.7rem;">2</span>
+            </li>
+            <li class="sidebar-item" onclick="AppRouter.navigate('analytics')">
+              <div class="sidebar-item-content">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                Analytics
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Sidebar User Card -->
+        <div class="sidebar-user">
+          <div class="avatar">AS</div>
+          <div class="user-info">
+            <div class="user-name">Aarav Sharma</div>
+            <div class="user-role">Student (Computer Eng)</div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Dashboard Content -->
+      <section class="main-content">
+        <div class="view-header">
+          <div class="view-title-group">
+            <h1>Student Portal Dashboard</h1>
+            <p>Track your submitted campus complaints and monitor real-time repair progress.</p>
+          </div>
+          <div class="view-actions">
+            <button class="btn btn-primary" onclick="AppRouter.navigate('report-issue')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              Report New Issue
+            </button>
+          </div>
+        </div>
+
+        <!-- 4 Student Status Metric Cards -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-top">
+              <span class="stat-label">My Reports</span>
+              <div class="stat-icon blue">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+              </div>
+            </div>
+            <div class="stat-value" id="student-stat-total">24</div>
+            <div class="stat-trend positive">All time submitted</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-top">
+              <span class="stat-label">Under Review</span>
+              <div class="stat-icon purple">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+              </div>
+            </div>
+            <div class="stat-value" id="student-stat-review">5</div>
+            <div class="stat-trend">AI triage verified</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-top">
+              <span class="stat-label">In Progress</span>
+              <div class="stat-icon orange">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+              </div>
+            </div>
+            <div class="stat-value" id="student-stat-progress">8</div>
+            <div class="stat-trend warning">Technicians on site</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-top">
+              <span class="stat-label">Resolved</span>
+              <div class="stat-icon green">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              </div>
+            </div>
+            <div class="stat-value" id="student-stat-resolved">11</div>
+            <div class="stat-trend positive">✓ Fully closed</div>
+          </div>
+        </div>
+
+        <!-- Recent Reports Table -->
+        <div class="table-card">
+          <div class="table-header-bar">
+            <div class="table-title">
+              <h3>Recent Reports</h3>
+              <p>Complaints submitted across your department and campus</p>
+            </div>
+            <div class="table-filters">
+              <div class="search-input-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" class="search-input" id="student-search-input" placeholder="Search issues..." onkeyup="AppRenderer.filterStudentTable()">
+              </div>
+              <button class="btn btn-secondary btn-sm" onclick="AppRouter.navigate('my-reports')">View All Reports</button>
+            </div>
+          </div>
+          <div class="custom-table-wrap">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Issue</th>
+                  <th>Location</th>
+                  <th>Category</th>
+                  <th>Priority</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="student-recent-tbody">
+                <!-- Injected via JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- ====================================================================
+         3. REPORT AN ISSUE PAGE
+         ==================================================================== -->
+    <section id="view-report-issue" class="app-view main-content" style="display:none;">
+      <div class="report-container">
+        <div class="view-header">
+          <div class="view-title-group">
+            <h1>Report a Campus Issue</h1>
+            <p>Our AI analyzes your description instantly to assign urgency and route to the correct team.</p>
+          </div>
+          <div class="badge badge-ai">
+            <span class="badge-dot" style="background:#8b5cf6;"></span>
+            AI-Powered Analysis Active
+          </div>
+        </div>
+
+        <!-- Duplicate Warning Alert Box (Shows if similarity matches) -->
+        <div id="duplicate-warning-banner" class="duplicate-warning-box" style="display:none;">
+          <div class="dup-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          </div>
+          <div class="dup-content">
+            <h4 id="dup-banner-title">Possible Duplicate Issue Detected</h4>
+            <p id="dup-banner-msg">We found similar active complaints for this room. You can review existing tickets or submit anyway.</p>
+            <div class="dup-actions">
+              <button class="btn btn-dark btn-sm" onclick="AppRenderer.viewExistingDuplicate()">View Existing Issue</button>
+              <button class="btn btn-secondary btn-sm" onclick="AppRenderer.dismissDuplicateBanner()">Dismiss & Continue</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Card -->
+        <div class="card">
+          <form id="report-issue-form" onsubmit="AppRenderer.handleReportSubmit(event)">
+            <div class="form-grid">
+              
+              <!-- Issue Title -->
+              <div class="form-group form-grid-full">
+                <label class="form-label">
+                  Issue Title
+                  <span class="hint">e.g., "Water leakage near electrical panel"</span>
+                </label>
+                <input type="text" id="form-title" class="form-control" placeholder="What is the problem?" required onblur="AppRenderer.checkInstantDuplicates()">
+              </div>
+
+              <!-- Category -->
+              <div class="form-group">
+                <label class="form-label">Category</label>
+                <select id="form-category" class="form-control" required>
+                  <option value="" disabled selected>Select category...</option>
+                  <option value="Electrical">⚡ Electrical & Power</option>
+                  <option value="Plumbing">🚰 Plumbing & Water</option>
+                  <option value="Internet">📶 Internet & Wi-Fi</option>
+                  <option value="Furniture">🪑 Broken Furniture</option>
+                  <option value="Cleanliness">🧹 Cleanliness & Sanitation</option>
+                  <option value="Safety">🛡️ Safety & Hazard</option>
+                  <option value="Classroom Equipment">📽️ Classroom Equipment & AV</option>
+                  <option value="Other">📦 Other Campus Utility</option>
+                </select>
+              </div>
+
+              <!-- Building -->
+              <div class="form-group">
+                <label class="form-label">Campus Building</label>
+                <select id="form-building" class="form-control" required onchange="AppRenderer.checkInstantDuplicates()">
+                  <option value="Academic Block 1">Academic Block 1</option>
+                  <option value="Technology Tower">Technology Tower</option>
+                  <option value="Block B" selected>Block B</option>
+                  <option value="Block C">Block C</option>
+                  <option value="Library Building">Library Building</option>
+                  <option value="Science Block">Science Block</option>
+                  <option value="Main Auditorium Wing">Main Auditorium Wing</option>
+                </select>
+              </div>
+
+              <!-- Floor -->
+              <div class="form-group">
+                <label class="form-label">Floor</label>
+                <select id="form-floor" class="form-control" required>
+                  <option value="Ground Floor" selected>Ground Floor</option>
+                  <option value="1st Floor">1st Floor</option>
+                  <option value="2nd Floor">2nd Floor</option>
+                  <option value="3rd Floor">3rd Floor</option>
+                  <option value="Basement / Depot">Basement / Depot</option>
+                </select>
+              </div>
+
+              <!-- Room / Area -->
+              <div class="form-group">
+                <label class="form-label">
+                  Room / Specific Area
+                  <span class="hint">e.g., "Room 204", "Computer Lab 2"</span>
+                </label>
+                <input type="text" id="form-room" class="form-control" placeholder="Room number or corridor marker" required onblur="AppRenderer.checkInstantDuplicates()">
+              </div>
+
+              <!-- Description -->
+              <div class="form-group form-grid-full">
+                <label class="form-label">
+                  Description
+                  <span class="hint">Be specific to assist the AI triage algorithm</span>
+                </label>
+                <textarea id="form-desc" class="form-control" placeholder="Describe what happened, any visible hazard, and how severe it appears..." required onblur="AppRenderer.checkInstantDuplicates()"></textarea>
+              </div>
+
+              <!-- Photo Upload Drag & Drop -->
+              <div class="form-group form-grid-full">
+                <label class="form-label">Photo Upload (Optional)</label>
+                <div class="dropzone-area" id="photo-dropzone" onclick="document.getElementById('form-photo-file').click()">
+                  <input type="file" id="form-photo-file" accept="image/*" style="display:none;" onchange="AppRenderer.handlePhotoSelect(event)">
+                  <div class="dropzone-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                  </div>
+                  <div class="dropzone-text">Click or drag & drop campus photo here</div>
+                  <div class="dropzone-subtext">PNG, JPG, WEBP up to 10MB</div>
+                </div>
+
+                <!-- Preview Chip -->
+                <div id="image-preview-chip" class="image-preview-chip">
+                  <div style="display:flex; align-items:center; gap:10px;">
+                    <span style="font-size:1.2rem;">📷</span>
+                    <span id="preview-filename" style="font-size:0.85rem; font-weight:600;">image.jpg</span>
+                  </div>
+                  <button type="button" class="btn btn-secondary btn-sm" onclick="AppRenderer.removePhoto(event)">Remove</button>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Submit Button Triggering Simulated AI Analysis -->
+            <div style="margin-top:28px; display:flex; justify-content:flex-end;">
+              <button type="submit" class="btn btn-ai btn-lg" id="btn-analyze-submit">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path></svg>
+                Analyze & Submit Issue
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         4. MY REPORTS PAGE (With 5-Step Visual Progress Timeline)
+         ==================================================================== -->
+    <section id="view-my-reports" class="app-view main-content" style="display:none;">
+      <div class="view-header">
+        <div class="view-title-group">
+          <h1>My Submitted Reports</h1>
+          <p>Track the 5-stage lifecycle and technician dispatch status for all your tickets.</p>
+        </div>
+        <div class="view-actions">
+          <div class="filter-btn-group">
+            <div class="filter-chip active" onclick="AppRenderer.filterMyReports('ALL', this)">All</div>
+            <div class="filter-chip" onclick="AppRenderer.filterMyReports('Under Review', this)">Under Review</div>
+            <div class="filter-chip" onclick="AppRenderer.filterMyReports('In Progress', this)">In Progress</div>
+            <div class="filter-chip" onclick="AppRenderer.filterMyReports('Resolved', this)">Resolved</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reports List Container -->
+      <div class="reports-list" id="my-reports-list">
+        <!-- Rendered dynamically by JavaScript -->
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         5. ADMIN DASHBOARD (Campus Overview & Critical Immediate Attention)
+         ==================================================================== -->
+    <section id="view-admin-dashboard" class="app-view app-layout" style="display:none;">
+      <!-- Admin Sidebar -->
+      <aside class="sidebar">
+        <div>
+          <div class="sidebar-label">Admin Console</div>
+          <ul class="sidebar-menu">
+            <li class="sidebar-item active" onclick="AppRouter.navigate('admin-dashboard')">
+              <div class="sidebar-item-content">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                Overview
+              </div>
+            </li>
+            <li class="sidebar-item" onclick="AppRouter.navigate('admin-issues-table')">
+              <div class="sidebar-item-content">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                All Issues
+              </div>
+              <span class="sidebar-count" id="admin-sidebar-total">127</span>
+            </li>
+            <li class="sidebar-item" onclick="AppRenderer.filterAdminCriticalOnly()">
+              <div class="sidebar-item-content">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                Critical Issues
+              </div>
+              <span class="badge badge-critical" style="padding:1px 6px; font-size:0.7rem;" id="admin-sidebar-critical">18</span>
+            </li>
+            <li class="sidebar-item" onclick="AppRouter.navigate('analytics')">
+              <div class="sidebar-item-content">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                Analytics & SLA
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Admin Profile -->
+        <div class="sidebar-user">
+          <div class="avatar admin-avatar">AD</div>
+          <div class="user-info">
+            <div class="user-name">Campus Facility Admin</div>
+            <div class="user-role">Estate & Ops Command</div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Admin Content -->
+      <section class="main-content">
+        <div class="view-header">
+          <div class="view-title-group">
+            <h1>Campus Overview</h1>
+            <p>Real-time telemetry, automated triage queues, and immediate hazard escalations.</p>
+          </div>
+          <div class="view-actions">
+            <button class="btn btn-secondary" onclick="CampusDataStore.resetToDefault(); AppRenderer.renderAll(); AppRouter.showToast('Reset sample dataset to default.', 'info')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+              Reset Demo Data
+            </button>
+            <button class="btn btn-primary" onclick="AppRouter.navigate('admin-issues-table')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line></svg>
+              Manage All Issues
+            </button>
+          </div>
+        </div>
+
+        <!-- Campus Stats Top Section -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-top">
+              <span class="stat-label">Total Issues</span>
+              <div class="stat-icon blue">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+              </div>
+            </div>
+            <div class="stat-value" id="admin-stat-total">127</div>
+            <div class="stat-trend positive">Campus-wide log</div>
+          </div>
+
+          <div class="stat-card" style="border-top: 3px solid var(--critical-red);">
+            <div class="stat-top">
+              <span class="stat-label" style="color:var(--critical-red);">Critical Issues</span>
+              <div class="stat-icon red">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              </div>
+            </div>
+            <div class="stat-value" style="color:var(--critical-red);" id="admin-stat-critical">18</div>
+            <div class="stat-trend warning">Action required &lt; 2 hrs</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-top">
+              <span class="stat-label">In Progress</span>
+              <div class="stat-icon orange">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+              </div>
+            </div>
+            <div class="stat-value" id="admin-stat-progress">25</div>
+            <div class="stat-trend">Dispatched to crews</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-top">
+              <span class="stat-label">Resolved</span>
+              <div class="stat-icon green">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              </div>
+            </div>
+            <div class="stat-value" id="admin-stat-resolved">84</div>
+            <div class="stat-trend positive">✓ Avg Time: 2.4 days</div>
+          </div>
+        </div>
+
+        <!-- PRIORITY SECTION: Issues Requiring Immediate Attention -->
+        <div class="admin-critical-section">
+          <div class="section-subhead">
+            <h3>
+              <span style="display:inline-block; width:12px; height:12px; border-radius:50%; background:var(--critical-red); box-shadow:0 0 10px var(--critical-red);"></span>
+              Issues Requiring Immediate Attention
+            </h3>
+            <span class="badge badge-critical">High Hazard Priority</span>
+          </div>
+
+          <!-- 3 Highlighted Critical Cards Grid -->
+          <div class="critical-cards-grid" id="admin-critical-cards-grid">
+            <!-- Dynamic Cards Injected via JavaScript -->
+          </div>
+        </div>
+
+        <!-- Admin Table Preview in Dashboard -->
+        <div class="table-card">
+          <div class="table-header-bar">
+            <div class="table-title">
+              <h3>Live Issue Operations Queue</h3>
+              <p>Real-time intake from student body & smart sensors</p>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="AppRouter.navigate('admin-issues-table')">Open Full Table</button>
+          </div>
+          <div class="custom-table-wrap">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Issue</th>
+                  <th>Location</th>
+                  <th>Category</th>
+                  <th>Priority</th>
+                  <th>Department</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-dashboard-tbody">
+                <!-- Injected via JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- ====================================================================
+         6. ADMIN ALL ISSUES TABLE VIEW
+         ==================================================================== -->
+    <section id="view-admin-issues-table" class="app-view main-content" style="display:none;">
+      <div class="view-header">
+        <div class="view-title-group">
+          <h1>Campus Issue Management</h1>
+          <p>Filter, reassign departments, and update ticket lifecycle statuses.</p>
+        </div>
+        <div class="view-actions">
+          <button class="btn btn-secondary" onclick="AppRouter.navigate('admin-dashboard')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            Back to Overview
+          </button>
+        </div>
+      </div>
+
+      <!-- Full Table Card -->
+      <div class="table-card">
+        <div class="table-header-bar">
+          <div class="search-input-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" class="search-input" id="admin-table-search" placeholder="Search ID, title, room..." onkeyup="AppRenderer.filterAdminMasterTable()">
+          </div>
+
+          <div class="table-filters">
+            <div class="filter-btn-group">
+              <div class="filter-chip active" id="admin-chip-all" onclick="AppRenderer.setAdminFilter('ALL', this)">All</div>
+              <div class="filter-chip" id="admin-chip-crit" onclick="AppRenderer.setAdminFilter('CRITICAL', this)">Critical</div>
+              <div class="filter-chip" id="admin-chip-high" onclick="AppRenderer.setAdminFilter('HIGH', this)">High</div>
+              <div class="filter-chip" onclick="AppRenderer.setAdminFilter('MEDIUM', this)">Medium</div>
+              <div class="filter-chip" onclick="AppRenderer.setAdminFilter('LOW', this)">Low</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="custom-table-wrap">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Issue</th>
+                <th>Location</th>
+                <th>Category</th>
+                <th>Priority</th>
+                <th>Department</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-master-tbody">
+              <!-- Rendered via JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         7. ANALYTICS PAGE VIEW
+         ==================================================================== -->
+    <section id="view-analytics" class="app-view main-content" style="display:none;">
+      <div class="view-header">
+        <div class="view-title-group">
+          <h1>Campus Operations Analytics</h1>
+          <p>Deep-dive telemetry on resolution velocity, department workloads, and safety trends.</p>
+        </div>
+        <div class="view-actions">
+          <button class="btn btn-secondary btn-sm" onclick="AppRouter.showToast('Exported PDF SLA summary report.', 'success')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Export SLA Report
+          </button>
+        </div>
+      </div>
+
+      <!-- Top KPI Row -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">SLA Compliance</div>
+          <div class="stat-value" style="color:var(--low-green);">94.8%</div>
+          <div class="stat-trend positive">↑ 4.2% vs last month</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Avg Critical Turnaround</div>
+          <div class="stat-value" style="color:var(--critical-red);">1.8 hrs</div>
+          <div class="stat-trend positive">Within 2h safety standard</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">AI Triage Accuracy</div>
+          <div class="stat-value" style="color:var(--purple-ai);">99.2%</div>
+          <div class="stat-trend positive">Auto-routed correctly</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Resolved Tickets</div>
+          <div class="stat-value" style="color:var(--brand-primary);">84 / 127</div>
+          <div class="stat-trend positive">66.1% clearance rate</div>
+        </div>
+      </div>
+
+      <!-- Charts 2-Column Grid -->
+      <div class="analytics-grid">
+        
+        <!-- Category Distribution Simulated Bar Chart -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <h3>Issue Volume by Category</h3>
+            <span class="badge badge-ai">Live Breakdown</span>
+          </div>
+          <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px;">Active tickets distributed across infrastructure verticals</p>
+          
+          <div class="bar-chart">
+            <div class="bar-group">
+              <div class="bar-column critical" style="height: 85%;">
+                <span class="bar-val-tooltip">38</span>
+              </div>
+              <span class="bar-label">Electrical</span>
+            </div>
+            <div class="bar-group">
+              <div class="bar-column" style="height: 65%;">
+                <span class="bar-val-tooltip">28</span>
+              </div>
+              <span class="bar-label">Internet</span>
+            </div>
+            <div class="bar-group">
+              <div class="bar-column" style="height: 52%;">
+                <span class="bar-val-tooltip">21</span>
+              </div>
+              <span class="bar-label">Plumbing</span>
+            </div>
+            <div class="bar-group">
+              <div class="bar-column" style="height: 40%;">
+                <span class="bar-val-tooltip">16</span>
+              </div>
+              <span class="bar-label">AV Equip</span>
+            </div>
+            <div class="bar-group">
+              <div class="bar-column" style="height: 32%;">
+                <span class="bar-val-tooltip">14</span>
+              </div>
+              <span class="bar-label">Furniture</span>
+            </div>
+            <div class="bar-group">
+              <div class="bar-column" style="height: 25%;">
+                <span class="bar-val-tooltip">10</span>
+              </div>
+              <span class="bar-label">Cleanliness</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Department Workload Progress -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <h3>Department Clearance</h3>
+            <span class="badge badge-low">Healthy SLA</span>
+          </div>
+          <div class="dept-list">
+            <div class="dept-item">
+              <div class="dept-meta">
+                <span>Electrical & Maintenance</span>
+                <strong>88% resolved</strong>
+              </div>
+              <div class="dept-progress-track">
+                <div class="dept-progress-fill" style="width: 88%; background:var(--critical-red);"></div>
+              </div>
+            </div>
+
+            <div class="dept-item">
+              <div class="dept-meta">
+                <span>IT & Campus Networks</span>
+                <strong>92% resolved</strong>
+              </div>
+              <div class="dept-progress-track">
+                <div class="dept-progress-fill" style="width: 92%; background:var(--brand-primary);"></div>
+              </div>
+            </div>
+
+            <div class="dept-item">
+              <div class="dept-meta">
+                <span>Plumbing & Sanitation</span>
+                <strong>79% resolved</strong>
+              </div>
+              <div class="dept-progress-track">
+                <div class="dept-progress-fill" style="width: 79%; background:var(--high-orange);"></div>
+              </div>
+            </div>
+
+            <div class="dept-item">
+              <div class="dept-meta">
+                <span>AV & Academic Support</span>
+                <strong>95% resolved</strong>
+              </div>
+              <div class="dept-progress-track">
+                <div class="dept-progress-fill" style="width: 95%; background:var(--low-green);"></div>
+              </div>
+            </div>
+
+            <div class="dept-item">
+              <div class="dept-meta">
+                <span>Carpentry & Estate Depot</span>
+                <strong>82% resolved</strong>
+              </div>
+              <div class="dept-progress-track">
+                <div class="dept-progress-fill" style="width: 82%; background:#8b5cf6;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ====================================================================
+       MODAL 1: AI LIVE ANALYSIS SIMULATOR MODAL
+       ==================================================================== -->
+  <div id="ai-modal" class="ai-modal-overlay">
+    <div class="ai-modal-box">
+      <!-- Modal Top Bar -->
+      <div class="ai-modal-header">
+        <div class="ai-chip-header">
+          <div class="ai-scanner-pulse"></div>
+          AI-Powered Analysis Engine
+        </div>
+        <div style="font-size:0.8rem; color:#cbd5e1;">NLP Hazard Heuristics v2.4</div>
+      </div>
+
+      <!-- Step 1: Loading Scanner Animation -->
+      <div id="ai-step-loading" class="ai-loading-step">
+        <div class="ai-radar-anim"></div>
+        <h3 style="font-size:1.3rem; font-weight:800; color:var(--brand-navy-950); margin-bottom:6px;">Analyzing your report...</h3>
+        <p id="ai-loading-status-text" style="color:var(--purple-ai); font-size:0.9rem; font-weight:600;">Extracting linguistic markers & location metadata...</p>
+        <div style="width:80%; height:6px; background:#e2e8f0; border-radius:10px; margin:20px auto 0; overflow:hidden;">
+          <div id="ai-progress-bar-fill" style="width:25%; height:100%; background:linear-gradient(to right, #6366f1, #a855f7); transition:width 0.4s ease;"></div>
+        </div>
+      </div>
+
+      <!-- Step 2: Analysis Results Card -->
+      <div id="ai-step-result" class="ai-result-step" style="display:none;">
+        <div class="ai-score-banner">
+          <div>
+            <div style="font-size:0.8rem; font-weight:700; text-transform:uppercase; color:var(--text-muted);">AI Priority Score</div>
+            <div style="display:flex; align-items:baseline; gap:6px; margin-top:2px;">
+              <span id="ai-res-score" style="font-size:2rem; font-weight:800; font-family:var(--font-display);">96</span>
+              <span style="color:var(--text-light); font-weight:700;">/ 100</span>
+            </div>
+            <div id="ai-res-level-badge" class="badge badge-critical" style="margin-top:6px;">CRITICAL PRIORITY</div>
+          </div>
+          <div id="ai-res-score-circle" class="ai-score-circle critical">
+            <span id="ai-res-circle-val">96</span>
+            <span style="font-size:0.65rem;">SCORE</span>
+          </div>
+        </div>
+
+        <div class="ai-info-grid">
+          <div class="ai-info-tile">
+            <div class="label">Detected Category</div>
+            <div class="val" id="ai-res-category">Electrical</div>
+          </div>
+          <div class="ai-info-tile">
+            <div class="label">Affected Department</div>
+            <div class="val" id="ai-res-dept">Maintenance & Electrical</div>
+          </div>
+        </div>
+
+        <div class="ai-box-summary">
+          <div style="font-weight:700; font-size:0.82rem; color:#6b21a8; text-transform:uppercase; margin-bottom:4px;">AI Summary:</div>
+          <p id="ai-res-summary">“Potential electrical safety hazard caused by water leakage near an electrical panel.”</p>
+          <div style="font-weight:700; font-size:0.82rem; color:#6b21a8; text-transform:uppercase; margin-top:10px; margin-bottom:4px;">Recommended Action:</div>
+          <p id="ai-res-action" style="font-weight:600;">“Inspect the area immediately and isolate the electrical supply if necessary.”</p>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <button type="button" class="btn btn-secondary" onclick="AppRenderer.closeAIModal()">Edit Form</button>
+          <button type="button" class="btn btn-primary btn-lg" onclick="AppRenderer.confirmAndSaveReport()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Submit Report
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       MODAL 2: ISSUE DETAILS & ADMIN STATUS MANAGER
+       ==================================================================== -->
+  <div id="issue-details-modal" class="modal-overlay">
+    <div class="modal-content-card">
+      <div class="modal-header">
+        <div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span class="badge badge-ai" id="modal-id-badge">#FMC-1024</span>
+            <span id="modal-priority-badge" class="badge badge-critical">CRITICAL</span>
+          </div>
+          <h2 id="modal-title" style="font-size:1.35rem; font-weight:800; color:var(--brand-navy-950); margin-top:6px;">Issue Details</h2>
+        </div>
+        <button class="btn-icon btn-secondary" onclick="AppRenderer.closeDetailsModal()" title="Close">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        
+        <!-- Location & Meta Grid -->
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(170px, 1fr)); gap:12px;">
+          <div class="ai-info-tile">
+            <div class="label">Location</div>
+            <div class="val" id="modal-location">Block B • Ground Floor</div>
+          </div>
+          <div class="ai-info-tile">
+            <div class="label">Assigned Dept</div>
+            <div class="val" id="modal-dept">Electrical & Maintenance</div>
+          </div>
+          <div class="ai-info-tile">
+            <div class="label">Reported By</div>
+            <div class="val" id="modal-reporter">Aarav Sharma</div>
+          </div>
+          <div class="ai-info-tile">
+            <div class="label">Date / Time</div>
+            <div class="val" id="modal-date">Today • 2 hours ago</div>
+          </div>
+        </div>
+
+        <!-- Description Box -->
+        <div>
+          <div style="font-size:0.8rem; font-weight:700; text-transform:uppercase; color:var(--text-muted); margin-bottom:6px;">Description</div>
+          <div id="modal-desc" style="background:#f8fafc; padding:14px; border-radius:var(--radius-md); border:1px solid var(--border-subtle); font-size:0.92rem; color:var(--brand-navy-900);"></div>
+        </div>
+
+        <!-- AI Diagnostic Box -->
+        <div class="ai-box-summary" style="margin-bottom:0;">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+            <div style="font-weight:700; font-size:0.82rem; color:#6b21a8; text-transform:uppercase;">AI Diagnostic Summary</div>
+            <span class="badge badge-ai" id="modal-ai-score">Score: 96/100</span>
+          </div>
+          <p id="modal-ai-summary">Potential electrical safety hazard...</p>
+          <div style="margin-top:8px; font-size:0.85rem; color:#4c1d95; font-weight:600;">
+            <strong>Recommended Action: </strong><span id="modal-ai-action">Isolate circuit breaker...</span>
+          </div>
+        </div>
+
+        <!-- Lifecycle Progress Timeline in Modal -->
+        <div class="timeline-container" style="margin-top:0;">
+          <div style="font-size:0.8rem; font-weight:700; text-transform:uppercase; color:var(--text-muted); margin-bottom:12px;">Resolution Lifecycle</div>
+          <div class="timeline-steps" id="modal-timeline-steps">
+            <!-- Dynamic Nodes -->
+          </div>
+        </div>
+
+        <!-- Admin Quick Status Update Workflow -->
+        <div id="modal-admin-action-box" style="background:#f1f5f9; padding:16px; border-radius:var(--radius-lg); border:1px solid var(--border-subtle);">
+          <div style="font-size:0.85rem; font-weight:700; color:var(--brand-navy-950); margin-bottom:10px;">Admin Actions & Status Transition:</div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="btn btn-secondary btn-sm" onclick="AppRenderer.updateModalStatus('Under Review')">Mark Under Review</button>
+            <button class="btn btn-secondary btn-sm" onclick="AppRenderer.updateModalStatus('Assigned')">Assign Technician</button>
+            <button class="btn btn-secondary btn-sm" onclick="AppRenderer.updateModalStatus('In Progress')">Mark In Progress</button>
+            <button class="btn btn-primary btn-sm" style="background:var(--low-green);" onclick="AppRenderer.updateModalStatus('Resolved')">✓ Mark Resolved</button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <span style="font-size:0.82rem; color:var(--text-muted);" id="modal-footer-tag">FixMyCampus Autonomous Dispatch System</span>
+        <button class="btn btn-dark btn-sm" onclick="AppRenderer.closeDetailsModal()">Close Details</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container"></div>
+
+  <!-- Application Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/ai-engine.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
